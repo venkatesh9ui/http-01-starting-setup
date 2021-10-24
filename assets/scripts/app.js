@@ -19,19 +19,19 @@ function sendHttpRequest(method, url) {
   return promise;
 }
 
-function fetchPosts() {
-  sendHttpRequest('GET', 'https://jsonplaceholder.typicode.com/posts').then(
-    (responseData) => {
-      const listOfPosts = responseData; //xhr.response; // If we're using xhr.responseType we don't need to write manually JSON.parse
-      // const listOfPosts = JSON.parse(xhr.response); // One other way of parsing the data (manually)
-      // console.log(listOfPosts);
-      for (const post of listOfPosts) {
-        const postEl = document.importNode(postTemplate.content, true);
-        postEl.querySelector('h2').textContent = post.title.toUpperCase();
-        postEl.querySelector('p').textContent = post.body;
-        listElement.append(postEl);
-      }
-    }
+async function fetchPosts() {
+  const responseData = await sendHttpRequest(
+    'GET',
+    'https://jsonplaceholder.typicode.com/posts'
   );
+  const listOfPosts = responseData; //xhr.response; // If we're using xhr.responseType we don't need to write manually JSON.parse
+  // const listOfPosts = JSON.parse(xhr.response); // One other way of parsing the data (manually)
+  // console.log(listOfPosts);
+  for (const post of listOfPosts) {
+    const postEl = document.importNode(postTemplate.content, true);
+    postEl.querySelector('h2').textContent = post.title.toUpperCase();
+    postEl.querySelector('p').textContent = post.body;
+    listElement.append(postEl);
+  }
 }
 fetchPosts();
