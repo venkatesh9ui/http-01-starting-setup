@@ -29,7 +29,10 @@ function sendHttpRequest(method, url, data) {
   //   xhr.send(JSON.stringify(data));
   // });
   // return promise;
-  return fetch(url).then((response) => response.json());
+  return fetch(url, {
+    method: method,
+    body: JSON.stringify(data),
+  }).then((response) => response.json()); // GET is by DEFAULT no need to mention but you can
 }
 
 async function fetchPosts() {
