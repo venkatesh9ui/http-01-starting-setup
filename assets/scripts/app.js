@@ -13,8 +13,17 @@ function sendHttpRequest(method, url, data) {
     xhr.responseType = 'json'; // One way of parsing the JSON data
 
     xhr.onload = function () {
-      reslove(xhr.response);
+      if (xhr.status >= 200 && xhr.status < 300) {
+        reslove(xhr.response);
+      } else {
+        reject(new Error('Something went wrong!'));
+      }
+
       //   console.log(xhr.response);
+    };
+
+    xhr.onerror = function () {
+      reject(new Error('Failed to send request!'));
     };
 
     xhr.send(JSON.stringify(data));
@@ -23,19 +32,23 @@ function sendHttpRequest(method, url, data) {
 }
 
 async function fetchPosts() {
-  const responseData = await sendHttpRequest(
-    'GET',
-    'https://jsonplaceholder.typicode.com/posts'
-  );
-  const listOfPosts = responseData; //xhr.response; // If we're using xhr.responseType we don't need to write manually JSON.parse
-  // const listOfPosts = JSON.parse(xhr.response); // One other way of parsing the data (manually)
-  // console.log(listOfPosts);
-  for (const post of listOfPosts) {
-    const postEl = document.importNode(postTemplate.content, true);
-    postEl.querySelector('h2').textContent = post.title.toUpperCase();
-    postEl.querySelector('p').textContent = post.body;
-    postEl.querySelector('li').id = post.id;
-    listElement.append(postEl);
+  try {
+    const responseData = await sendHttpRequest(
+      'GET',
+      'https://jsonplaceholder.typicode.com/posts'
+    );
+    const listOfPosts = responseData; //xhr.response; // If we're using xhr.responseType we don't need to write manually JSON.parse
+    // const listOfPosts = JSON.parse(xhr.response); // One other way of parsing the data (manually)
+    // console.log(listOfPosts);
+    for (const post of listOfPosts) {
+      const postEl = document.importNode(postTemplate.content, true);
+      postEl.querySelector('h2').textContent = post.title.toUpperCase();
+      postEl.querySelector('p').textContent = post.body;
+      postEl.querySelector('li').id = post.id;
+      listElement.append(postEl);
+    }
+  } catch (error) {
+    alert(error.message);
   }
 }
 
