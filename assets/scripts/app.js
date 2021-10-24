@@ -6,7 +6,8 @@ const postList = document.querySelector('ul');
 
 function sendHttpRequest(method, url, data) {
   // const promise = new Promise((reslove, reject) => {
-  //   const xhr = new XMLHttpRequest();
+  // const xhr = new XMLHttpRequest();
+  // xhr.setRequestHeader('Content-Type', 'application/json'); // We can how many headers we want we can but we can't delete once the header added
 
   //   xhr.open(method, url);
 
@@ -33,8 +34,8 @@ function sendHttpRequest(method, url, data) {
     method: method,
     body: JSON.stringify(data),
     headers: {
-      'Content-Type': 'application/json',
-    },
+      'Content-Type': 'application/json'
+    }
   }).then((response) => response.json()); // GET is by DEFAULT no need to mention but you can
 }
 
@@ -64,7 +65,7 @@ async function createPost(title, content) {
   const post = {
     title: title,
     body: content,
-    userId: userId,
+    userId: userId
   };
   sendHttpRequest('POST', 'https://jsonplaceholder.typicode.com/posts', post);
 }
